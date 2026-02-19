@@ -4,19 +4,20 @@ import Header from './components/Header.vue'
 import HeroSection from './components/HeroSection.vue'
 import MenuSection from './components/MenuSection.vue'
 import Footer from './components/Footer.vue'
-import Toast from './components/Toast.vue'
+import OrderModal from './components/OrderModal.vue'
 import { products } from './data/products'
+import type { Product } from './types/product'
 
-const toastVisible = ref(false)
-const toastMessage = ref('')
+const isModalOpen = ref(false)
+const selectedProduct = ref<Product | null>(null)
 
-function handleOrdered(productName: string) {
-  toastMessage.value = `Pedido de "${productName}" enviado via WhatsApp! 🎉`
-  toastVisible.value = true
+function handleSelectProduct(product: Product) {
+  selectedProduct.value = product
+  isModalOpen.value = true
 }
 
-function hideToast() {
-  toastVisible.value = false
+function handleCloseModal() {
+  isModalOpen.value = false
 }
 </script>
 
@@ -24,8 +25,9 @@ function hideToast() {
   <Header />
   <main>
     <HeroSection />
-    <MenuSection :products="products" @ordered="handleOrdered" />
+    <MenuSection :products="products" @select-product="handleSelectProduct" />
   </main>
   <Footer />
-  <Toast :message="toastMessage" :visible="toastVisible" @hide="hideToast" />
+
+  <OrderModal :isOpen="isModalOpen" :product="selectedProduct" @close="handleCloseModal" />
 </template>

@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  ordered: [productName: string]
+  'select-product': [product: Product]
 }>()
 
 // Agrupa por categoria mantendo a ordem de aparição
@@ -47,12 +47,8 @@ const categoryEmoji: Record<string, string> = {
       </h3>
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <ProductCard
-          v-for="product in group.items"
-          :key="product.id"
-          :product="product"
-          @ordered="(name) => emit('ordered', name)"
-        />
+        <ProductCard v-for="product in group.items" :key="product.id" :product="product"
+          @select-product="(p) => emit('select-product', p)" />
       </div>
     </div>
   </section>
